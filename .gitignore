@@ -1,2 +1,7 @@
 __pycache__/
 file.json
+100-dump.sql
+env_variables
+test_app.py
+test.py
+test_get_count.py

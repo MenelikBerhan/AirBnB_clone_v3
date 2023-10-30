@@ -53,35 +53,35 @@ def places_search_get():
 
     city_id_list.update(req_json.get('cities', []))  # empty or with city ids
     amenity_id_list = set(req_json.get('amenities', []))  # amenity ids or []
-    search_result = []  # assuming a place is unique to a city
+    search_result = []
     if city_id_list:
         for city_id in city_id_list:
             city = storage.get(City, city_id)  # a city or None
             city_places = city.places if city else []  # a citie's places or []
-            # search_result.extend(
-            #     [place.to_dict() for place in city_places
-            #      if amenity_id_list.issubset(
-            #          set([amenity.id for amenity in place.amenities]))])
-            for place in city_places:
-                plce_amnties = set([amenity.id for amenity in place.amenities])
-                if amenity_id_list.issubset(plce_amnties):
-                    plce_dict = place.to_dict()
-    # Due to a bug not found yet, plce_dict contains 'ameneties' key
-    # with a value of Amenity objects list
-                    plce_dict.pop('amenities', None)
-                    search_result.append(plce_dict)
+            search_result.extend(
+                [place.to_dict('search') for place in city_places
+                 if amenity_id_list.issubset(
+                     set([amenity.id for amenity in place.amenities]))])
+# for place in city_places:
+#     plce_amnties = set([amenity.id for amenity in place.amenities])
+#     if amenity_id_list.issubset(plce_amnties):
+#         plce_dict = place.to_dict()
+# Due to a bug not found yet, plce_dict contains 'ameneties' key
+# with a value of Amenity objects list
+# plce_dict.pop('amenities', None)
+# search_result.append(plce_dict)
     else:
-        # search_result.extend(
-        #     [plce.to_dict() for plce in storage.all(Place).values()
-        #      if amenity_id_list.issubset(
-        #          set([amnty.id for amnty in plce.amenities]))])
-        places = storage.all(Place).values()
-        for place in places:
-            place_amenities = set([amenity.id for amenity in place.amenities])
-            if amenity_id_list.issubset(place_amenities):
-                plce_dict = place.to_dict()
-                plce_dict.pop('amenities', None)
-                search_result.append(plce_dict)
+        search_result.extend(
+            [plce.to_dict('search') for plce in storage.all(Place).values()
+             if amenity_id_list.issubset(
+                 set([amenity.id for amenity in plce.amenities]))])
+# places = storage.all(Place).values()
+# for place in places:
+#     place_amenities = set([amenity.id for amenity in place.amenities])
+#     if amenity_id_list.issubset(place_amenities):
+#         plce_dict = place.to_dict()
+#         plce_dict.pop('amenities', None)
+#         search_result.append(plce_dict)
 
     return (jsonify(search_result))
 
