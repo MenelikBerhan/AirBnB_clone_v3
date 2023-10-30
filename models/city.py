@@ -3,8 +3,6 @@
 import models
 from models.base_model import BaseModel, Base
 from models.place import Place
-from os import getenv
-import sqlalchemy
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 

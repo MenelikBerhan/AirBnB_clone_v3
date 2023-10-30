@@ -42,7 +42,6 @@ def places_amenities_delete(place_id, amenity_id):
         if amenity.id not in place.amenity_ids:
             abort(404)
         place.amenity_ids.remove(amenity.id)
-    # place.save() amenity.save() if updated_at needs to be updated
     storage.save()
     return (jsonify({}))
 
@@ -62,6 +61,5 @@ def places_amenities_post(place_id, amenity_id):
         if amenity.id in place.amenity_ids:
             return (jsonify(amenity.to_dict()))
         place.amenities = amenity  # setter appends amenity.id to amenity_ids
-    # place.save() amenity.save() if updated_at needs to be updated
     storage.save()
     return (jsonify(amenity.to_dict()), 201)

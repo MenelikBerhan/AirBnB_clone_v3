@@ -64,11 +64,9 @@ def users_put(user_id):
     """Updates a User resource of given id if request content is valid."""
     user = retrive_object(User, user_id)
     req_json = validate_request_json(request)
-    ignore = ['id', 'email', 'created_at', 'updated_at']  # 'password',
+    ignore = ['id', 'email', 'created_at', 'updated_at']
     for key, value in req_json.items():
         if key not in ignore:
             setattr(user, key, value)
-        # if key == 'password':  # hash password
-        #     setattr(user, key, md5(value.encode()).hexdigest())
     user.save()
     return (jsonify(user.to_dict()))

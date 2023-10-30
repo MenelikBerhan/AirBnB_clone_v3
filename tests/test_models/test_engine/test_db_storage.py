@@ -90,20 +90,20 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_get(self):
         """Test that get properly retrieves objects from database"""
-        storage = DBStorage()
         state = State(name="California")
-        storage.new(state)
-        storage.save()
+        state.save()
         state_id = state.id
-        self.assertEqual(state, storage.get(State, state_id))
+        self.assertEqual(state, models.storage.get(State, state_id))
+        self.assertEqual(None, models.storage.get(State, '123'))
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count(self):
         """Test that count properly computes number of objects"""
-        storage = DBStorage()
-        state_init_count = storage.count(State)
+        all_init_count = len(models.storage.all())
+        state_init_count = len(models.storage.all(State))
         state = State(name="California")
-        storage.new(state)
-        storage.save()
-        state_count = storage.count(State)
+        state.save()
+        state_count = models.storage.count(State)
+        all_count = models.storage.count(State)
         self.assertEqual(state_count, state_init_count + 1)
+        self.assertEqual(all_count, all_init_count + 1)

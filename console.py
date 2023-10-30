@@ -148,9 +148,6 @@ class HBNBCommand(cmd.Cmd):
                                         args[3] = float(args[3])
                                     except Exception:
                                         args[3] = 0.0
-                            if args[2] == 'password':  # hash passwrod
-                                pss = md5(args[3].encode()).hexdigest()
-                                args[3] = pss
                             setattr(models.storage.all()[k], args[2], args[3])
                             models.storage.all()[k].save()
                         else:
